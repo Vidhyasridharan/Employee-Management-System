@@ -14,3 +14,6 @@ public interface EmployeeService {
 	 EmployeeEntity updateEmployee(EmployeeEntity employee);
 	 void deleteEmployee(Long id);
 }
+public Page<Employee> getAllEmployees(Pageable pageable) {
+    return employeeRepository.findAll(pageable);
+}
