@@ -53,6 +53,12 @@ model.addAttribute("employee", employeeService.editEmployee(id));
 		employeeService.deleteEmployee(id);
 		return "redirect:/employees";
 	}
+
+@GetMapping("/employees")
+public Page<Employee> getAllEmployees(
+        @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+    return employeeService.getAllEmployees(pageable);
+}
 }
 
 
