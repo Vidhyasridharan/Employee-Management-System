@@ -1,74 +1,62 @@
 package com.example.demo.test.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.test.entity.EmployeeEntity;
 import com.example.demo.test.service.EmployeeService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-
 
 @Controller
 public class EmployeeController {
-public EmployeeController(EmployeeService employeeService) {
-		super();
-		this.employeeService = employeeService;
-	}
 
+    private final EmployeeService employeeService;
 
-private EmployeeService employeeService;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
-@GetMapping("/employees")
-public String viewHomepage(Model model) {
-	model.addAttribute("employees", employeeService.listallEmployees());
-	return "employees";
+    @GetMapping("/employees")
+    public String viewEmployees(
+            Model model,
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+
+        model.addAttribute("employees", employeeService.getAllEmployees(pageable));
+        return "employees";
+    }
+
+    @GetMapping("/employees/new")
+    public String addEmployee(Model model) {
+        model.addAttribute("employee", new EmployeeEntity());
+        return "create_employee";
+    }
+
+    @PostMapping("/employees")
+    public String saveEmployee(
+            @Valid @ModelAttribute("employee") EmployeeEntity employee,
+            BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "create_employee";
+        }
+
+        employeeService.addEmployee(employee);
+        return "redirect:/employees";
+    }
+
+    @GetMapping("/employees/edit/{id}")
+    public String editEmployee(@PathVariable Long id, Model model) {
+        model.addAttribute("employee", employeeService.editEmployee(id));
+        return "edit_employee";
+    }
+
+    @GetMapping("/employees/delete/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return "redirect:/employees";
+    }
 }
-
-@GetMapping("/employees/new")
-public String addEmployee(Model model) {
-	EmployeeEntity employee =new EmployeeEntity();
-	model.addAttribute("employee",employee);
-	return "create_employee";
-}
-
-@PostMapping("/employees")
-public String saveEmployee(@ModelAttribute("employee") EmployeeEntity employee) {
-	employeeService.addEmployee(employee);
-	return "redirect:/employees";
-}
-
-@GetMapping("employees/edit/{id}")
-
-public String editEmployee(@PathVariable Long id,Model model) {
-model.addAttribute("employee", employeeService.editEmployee(id));
-	return "edit_employee";
-}
-	
-
-@GetMapping("/employees/{id}")
-	public String deleteEmployee(@PathVariable Long id) {
-		employeeService.deleteEmployee(id);
-		return "redirect:/employees";
-	}
-
-@GetMapping("/employees")
-public Page<Employee> getAllEmployees(
-        @PageableDefault(size = 10, sort = "id") Pageable pageable) {
-    return employeeService.getAllEmployees(pageable);
-}
-	
-@PostMapping("/employees")
-public EmployeeEntity createEmployee(
-        @Valid @RequestBody EmployeeEntity employee) {
-    return employeeService.saveEmployee(employee);
-}
-}
-
-
