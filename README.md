@@ -10,6 +10,7 @@ This project demonstrates core backend engineering concepts including REST API d
 - Pagination and sorting support for large datasets
 - Clear separation of controller, service, and repository layers
 - In-memory database for local development and testing
+- Input validation at API boundaries using Bean Validation
 
 ## Tech Stack
 - Java
@@ -37,6 +38,7 @@ Engineering Focus
 -Pagination and sorting for scalability
 -Clean and maintainable backend structure
 -Dependency injection and service abstraction
+- Defensive programming using request validation
 
 Future Enhancements
 -Input validation
