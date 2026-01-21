@@ -63,6 +63,12 @@ public Page<Employee> getAllEmployees(
         @PageableDefault(size = 10, sort = "id") Pageable pageable) {
     return employeeService.getAllEmployees(pageable);
 }
+	
+@PostMapping("/employees")
+public EmployeeEntity createEmployee(
+        @Valid @RequestBody EmployeeEntity employee) {
+    return employeeService.saveEmployee(employee);
+}
 }
 
 
