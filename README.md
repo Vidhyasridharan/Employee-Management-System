@@ -33,13 +33,13 @@ cd ems
 ./mvnw spring-boot:run
 
 Engineering Focus
-RESTful API design
-Pagination and sorting for scalability
-Clean and maintainable backend structure
-Dependency injection and service abstraction
+-RESTful API design
+-Pagination and sorting for scalability
+-Clean and maintainable backend structure
+-Dependency injection and service abstraction
 
 Future Enhancements
-Input validation
-Global exception handling
-Persistent database integration
-Automated tests
+-Input validation
+-Global exception handling
+-Persistent database integration
+-Automated tests
